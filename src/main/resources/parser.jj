@@ -1,0 +1,83 @@
+options {
+    DEBUG_PARSER = true;
+    OUTPUT_DIRECTORY = "../java/parser";
+}
+
+PARSER_BEGIN(Parser)
+
+package parser;
+
+public class Parser {
+
+}
+PARSER_END(Parser)
+
+SKIP : {
+    " "
+|   "\t"
+|   "\n"
+|   "\r"
+|   "\f"
+}
+
+/** Reserved words. */
+TOKEN : {
+    <BOOLEAN : "boolean">
+|   <CLASS : "class">
+|   <ELSE : "else">
+|   <EXTENDS: "extends">
+|   <FALSE: "false">
+|   <IF: "if">
+|   <INT: "int">
+|   <MAIN : "main">
+|   <NEW: "new">
+|   <PUBLIC : "public">
+|   <RETURN: "return">
+|   <STATIC: "static">
+|   <STRING : "String">
+|   <SOP : "System.out.println">
+|   <THIS: "this">
+|   <TRUE: "true">
+|   <VOID: "void">
+|   <WHILE: "while">
+}
+
+/** Literals. */
+TOKEN : {
+    <INTEGER_LITERAL : ["1" - "9"](["0" - "9"])*>
+|   <STRING_LITERAL : "\"" (~["\"","\\","\n","\r"])* "\"">
+}
+
+/** Identifiers. */
+TOKEN : {
+    <ID : ["_","a" - "z","A" - "Z"](["_","a" - "z","A" - "Z","0" - "9"])*>
+}
+
+/** Separators. */
+TOKEN : {
+    <LPAR : "(">
+|   <RPAR : ")">
+|   <LBRACE : "{">
+|   <RBRACE : "}">
+|   <LBRACKET : "[">
+|   <RBRACKET : "]">
+|   <SEMICOLON : ";">
+|   <COMMA : ",">
+|   <DOT : ".">
+}
+
+/** Operators. */
+
+
+void Program() :
+{}
+{
+    MainClass()
+}
+
+void MainClass() :
+{}
+{
+    <CLASS> <ID> <LBRACE> <EOF>
+}
+
