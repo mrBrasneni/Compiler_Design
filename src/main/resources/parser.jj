@@ -18,6 +18,8 @@ SKIP : {
 |   "\n"
 |   "\r"
 |   "\f"
+|   <SINGLE_LINE_COMMENT : "//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")? >
+|   <MULTI_LINE_COMMENT : "/*" (~["*"] | "*" ~["/"])* "*/" >
 }
 
 /** Reserved words. */
@@ -45,7 +47,7 @@ TOKEN : {
 
 /** Literals. */
 TOKEN : {
-    <INTEGER_LITERAL : ["1" - "9"](["0" - "9"])*>
+    <INTEGER_LITERAL : ["0" - "9"](["0" - "9"])*>
 |   <STRING_LITERAL : "\"" (~["\"","\\","\n","\r"])* "\"">
 }
 
@@ -70,13 +72,19 @@ TOKEN : {
 /** Operators. */
 TOKEN : {
     <ASSIGN : "=">
-|   <MINUS : "-">
 |   <EQUALS : "==">
+|   <NOTEQ : "!=">
 |   <GT : ">">
 |   <GTEQ : ">=">
 |   <LESS : "<">
 |   <LESSEQ : "<=">
 |   <NOT : "!">
+|   <OR : "||">
+|   <AND : "&&">
+|   <PLUS : "+">
+|   <MINUS : "-">
+|   <MUL : "*">
+|   <DIV : "/">
 }
 
 
@@ -91,7 +99,7 @@ void MainClass():
 {
     <CLASS> <ID> <LBRACE>
         <PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LBRACKET> <RBRACKET>  <ID> <RPAR> <LBRACE>
-//            Statement()
+            (Statement())*
         <RBRACE>
     <RBRACE>
 }
@@ -99,14 +107,9 @@ void MainClass():
 void ClassDecl():
 {}
 {
-//    (<CLASS> <ID> <LBRACE>
-////        (VarDecl() | MethodDecl()) *
-//    <RBRACE>)
-//|
     <CLASS> <ID> (<EXTENDS> <ID> )? <LBRACE>
-         (VarDecl()
-         |
-         MethodDecl()) *
+         (VarDecl())*
+         (MethodDecl()) *
     <RBRACE>
 }
 
@@ -120,7 +123,7 @@ void MethodDecl():
 {}
 {
     <PUBLIC> Type() <ID> <LPAR> FormalList() <RPAR> <LBRACE>
-        (VarDecl())* (Statement())* <RETURN> Exp() <SEMICOLON>
+        (LOOKAHEAD(2) VarDecl())* (Statement())* <RETURN> Exp() <SEMICOLON>
     <RBRACE>
 }
 
@@ -139,39 +142,85 @@ void FormalRest():
 void Type():
 {}
 {
-    <INT> <LBRACKET> <RBRACKET>
+     (<INT>
 |   <BOOLEAN>
-|   <INT>
-|   <ID>
+|   <ID> ) (TypeArray())?
+}
+
+void TypeArray():
+{}
+{
+    <LBRACKET> <RBRACKET>
 }
 
 void Statement():
 {}
 {
-    (Statement())* //recusrivitate de stanga
+    <LBRACE> (Statement())* <RBRACE>
 |   <IF> <LPAR> Exp() <RPAR> Statement() <ELSE> Statement()
 |   <WHILE> <LPAR> Exp() <RPAR> Statement()
 |   <SOP> <LPAR> Exp() <RPAR>  <SEMICOLON>
-|   <ID> <ASSIGN>  Exp() <SEMICOLON>
-|   <ID> <LBRACKET> Exp() <RBRACKET> <ASSIGN>  Exp() <SEMICOLON>
+|   LOOKAHEAD(2) <ID> <ASSIGN>  Exp() <SEMICOLON>
+|   LOOKAHEAD(2) <ID> <LBRACKET> Exp() <RBRACKET> <ASSIGN>  Exp() <SEMICOLON>
+|   VarDecl()
 }
 
 void Exp():
 {}
 {
-    Exp() <OP> Exp()
-|   Exp() <LBRACKET>  Exp() <RBRACKET>
-|   Exp() <DOT> <LENGTH>
-|   Exp() <DOT> <ID> <LPAR> ExpList() <RPAR>
-|   <INTEGER_LITERAL>
+    ExpLogic()
+}
+
+void ExpLogic():
+{}
+{
+    ExpRel() ((<AND> | <OR> ) ExpRel())*
+}
+
+void ExpRel():
+{}
+{
+    ExpAdd() ((<GT> | <GTEQ> | <LESS> | <LESSEQ> | <EQUALS> | <NOTEQ> ) ExpAdd())*
+}
+
+void ExpAdd():
+{}
+{
+    ExpMul() ((<PLUS> | <MINUS> ) ExpMul())*
+}
+
+void ExpMul():
+{}
+{
+    ExpUnary() ((<MUL> | <DIV> ) ExpUnary())*
+}
+
+void ExpUnary():
+{}
+{
+    (<MINUS> | <NOT>)?
+    ExpPostfix()
+}
+
+void ExpPostfix():
+{}
+{
+    ExpFactor() (<LBRACKET> Exp() <RBRACKET>
+                | LOOKAHEAD(2) <DOT> <ID> (<LPAR> ExpList() <RPAR>)?
+                | <DOT> <LENGTH> )*
+}
+
+void ExpFactor():
+{}
+{
+    <INTEGER_LITERAL>
 |   <TRUE>
 |   <FALSE>
 |   <ID>
 |   <THIS>
-|   <NEW> <INT> <LBRACKET> Exp() <RBRACKET>
-|   <NEW> <ID> <LPAR> <RPAR>
-|   <NOT> Exp()
 |   <LPAR> Exp() <RPAR>
+|   LOOKAHEAD(2) <NEW> <INT> <LBRACKET> Exp() <RBRACKET>
+|   <NEW> <ID> <LPAR> <RPAR>
 }
 
 void ExpList():
