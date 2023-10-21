@@ -8,32 +8,7 @@ class Test1 {
 
     int a;
     Test1[] obj1;
+    boolean bool1;
+    boolean[] vect_bool;
 
-    public int meth1(int b, Test1 c, boolean flag){
-        return -1 + 2 * 3 / 4;
-    }
-
-    public Test1[] meth2() {
-        return b[2];
-    }
-
-    public boolean meth3() {
-        if(a > b) {
-            int c;
-            c = b * 100;
-        }
-        else {
-            while(b >= a) {
-                int[] vec;
-                vec = new int[100 * a];
-            }
-            Test1 obj;
-            obj = new Test1();
-            System.out.println(obj.obj1[3]);
-        }
-        a = (-7) * 3;
-
-        b = 1 < 2 && 2 < 3 && 3 < 4;
-        return !false;
-    }
 }
