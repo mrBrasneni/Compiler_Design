@@ -7,7 +7,6 @@ import parser.Parser;
 public
 class ASTMainClass extends SimpleNode {
 
-  private String name;
 
   public ASTMainClass(int id) {
     super(id);
@@ -17,13 +16,5 @@ class ASTMainClass extends SimpleNode {
     super(p, id);
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  @Override
-  public String toString() {
-    return super.toString() + ": " + name;
-  }
 }
 /* JavaCC - OriginalChecksum=5c5b426c5212967c0001abb186e2254e (do not edit this line) */

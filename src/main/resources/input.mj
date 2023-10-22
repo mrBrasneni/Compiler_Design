@@ -4,11 +4,18 @@ class Main {
     }
 }
 
-class Test1 {
+class Test1 extends Test2 {
 
     int a;
     Test1[] obj1;
     boolean bool1;
     boolean[] vect_bool;
 
+    public int meth1(int a, boolean b) {
+        return 1;
+    }
+
+    public Test1[] meth2(Test2[] vec) {
+            return 1;
+    }
 }

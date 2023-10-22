@@ -103,50 +103,47 @@ ASTProgram Program() #Program:
     {return jjtThis;}
 }
 
-void MainClass() #MainClass:
+void Identifier() #Identifier:
 {
     Token t;
 }
 {
-    <CLASS> t=<ID> <LBRACE>
-        <PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LBRACKET> <RBRACKET>  <ID> <RPAR> <LBRACE>
+    t=<ID>
+    {
+        jjtThis.setName(t.image);
+    }
+
+}
+
+void MainClass() #MainClass:
+{ }
+{
+    <CLASS> Identifier() <LBRACE>
+        <PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LBRACKET> <RBRACKET>  Identifier() <RPAR> <LBRACE>
             (Statement())*
         <RBRACE>
     <RBRACE>
-    {
-        jjtThis.setName(t.image);
-    }
 }
 
 void ClassDecl() #ClassDecl:
+{ }
 {
-    Token t;
-}
-{
-    <CLASS> t=<ID> (<EXTENDS> <ID> )? <LBRACE>
-         (VarDecl())*
-         (MethodDecl()) *
+    <CLASS> Identifier() (<EXTENDS> Identifier() )? #Inheritance <LBRACE>
+         (((VarDecl())*) #VarDecls)
+         ((MethodDecl()) * #MethodDecls)
     <RBRACE>
-    {
-        jjtThis.setName(t.image);
-    }
 }
 
-void VarDecl() #VarDecl(1):
+void VarDecl() #VarDecl:
+{}
 {
-    Token t;
-}
-{
-    Type() t=<ID> <SEMICOLON>
-    {
-        jjtThis.setName(t.image);
-    }
+    Type() Identifier() <SEMICOLON>
 }
 
 void MethodDecl() #MethodDecl:
 {}
 {
-    <PUBLIC> Type() <ID> <LPAR> FormalList() <RPAR> <LBRACE>
+    <PUBLIC> Type() Identifier() <LPAR> (FormalList() #Args) <RPAR> <LBRACE>
         (LOOKAHEAD(2) VarDecl())* (Statement())* <RETURN> Exp() <SEMICOLON>
     <RBRACE>
 }
@@ -154,23 +151,27 @@ void MethodDecl() #MethodDecl:
 void FormalList():
 {}
 {
-    (Type() <ID>  (FormalRest())*)?
+    (((Type() Identifier()) #Arg)  (FormalRest())*)?
 }
 
 void FormalRest():
 {}
 {
-    <COMMA> Type() <ID>
+    <COMMA> ((Type() Identifier()) #Arg)
 }
 
 void Type() #Type:
-{
-    Token t;
-}
+{ ASTIdentifier n;}
 {
      (<INT> {jjtThis.setType("int");}
 |   <BOOLEAN> {jjtThis.setType("boolean");}
-|   t=<ID> {jjtThis.setType(t.image);}) (<LBRACKET> <RBRACKET>{jjtThis.setVector(true);})?
+|   Identifier()
+        {
+            n = (ASTIdentifier)jjtree.popNode();
+            jjtThis.setType(n.getName());
+        }
+    )
+    (<LBRACKET> <RBRACKET>{jjtThis.setVector(true);})?
 }
 
 //void TypeArray() #TypeArray:

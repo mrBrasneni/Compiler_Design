@@ -7,8 +7,6 @@ import parser.Parser;
 public
 class ASTVarDecl extends SimpleNode {
 
-  private String name;
-
   public ASTVarDecl(int id) {
     super(id);
   }
@@ -17,13 +15,5 @@ class ASTVarDecl extends SimpleNode {
     super(p, id);
   }
 
-  public void setName(String name) {
-      this.name = name;
-  }
-
-  @Override
-  public String toString() {
-    return super.toString() + ": " + name;
-  }
 }
 /* JavaCC - OriginalChecksum=d187ab5b65acb1798d8b490eeb6d34da (do not edit this line) */
