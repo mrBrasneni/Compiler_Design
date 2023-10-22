@@ -1,6 +1,6 @@
 options {
     DEBUG_PARSER = true;
-    OUTPUT_DIRECTORY = "../java/parser";
+//    OUTPUT_DIRECTORY = "../java/parser";
 }
 
 PARSER_BEGIN(Parser)
@@ -160,8 +160,8 @@ void Statement():
 |   <IF> <LPAR> Exp() <RPAR> Statement() <ELSE> Statement()
 |   <WHILE> <LPAR> Exp() <RPAR> Statement()
 |   <SOP> <LPAR> Exp() <RPAR>  <SEMICOLON>
-|   LOOKAHEAD(2) <ID> <ASSIGN>  Exp() <SEMICOLON>
-|   LOOKAHEAD(2) <ID> <LBRACKET> Exp() <RBRACKET> <ASSIGN>  Exp() <SEMICOLON>
+|   LOOKAHEAD(2) <ID> (<LBRACKET> Exp() <RBRACKET>)? <ASSIGN>  Exp() <SEMICOLON>
+//|   LOOKAHEAD(2) <ID> <LBRACKET> Exp() <RBRACKET> <ASSIGN>  Exp() <SEMICOLON>
 |   VarDecl()
 }
 

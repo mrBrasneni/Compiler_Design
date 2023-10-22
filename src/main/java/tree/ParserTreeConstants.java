@@ -16,6 +16,21 @@ public interface ParserTreeConstants
   public int JJTVOID = 10;
   public int JJTARG = 11;
   public int JJTTYPE = 12;
+  public int JJTBLOCK = 13;
+  public int JJTIF = 14;
+  public int JJTWHILE = 15;
+  public int JJTPRINT = 16;
+  public int JJTASSIGNMENT = 17;
+  public int JJTORNODE = 18;
+  public int JJTANDNODE = 19;
+  public int JJTRELNODE = 20;
+  public int JJTADDNODE = 21;
+  public int JJTMULNODE = 22;
+  public int JJTUNARYNODE = 23;
+  public int JJTINTEGER = 24;
+  public int JJTTRUE = 25;
+  public int JJTFALSE = 26;
+  public int JJTTHIS = 27;
 
 
   public String[] jjtNodeName = {
@@ -32,6 +47,21 @@ public interface ParserTreeConstants
     "void",
     "Arg",
     "Type",
+    "Block",
+    "If",
+    "While",
+    "Print",
+    "Assignment",
+    "OrNode",
+    "AndNode",
+    "RelNode",
+    "AddNode",
+    "MulNode",
+    "UnaryNode",
+    "Integer",
+    "True",
+    "False",
+    "This",
   };
 }
-/* JavaCC - OriginalChecksum=5f9f4eeef8b68f810da7a7acd3730dcd (do not edit this line) */
+/* JavaCC - OriginalChecksum=4540438c5b2dcc5066d5dc782d19a28a (do not edit this line) */

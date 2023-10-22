@@ -12,10 +12,22 @@ class Test1 extends Test2 {
     boolean[] vect_bool;
 
     public int meth1(int a, boolean b) {
+
+        this.obj1[1] = a + b + c * 1;
+
         return 1;
     }
 
     public Test1[] meth2(Test2[] vec) {
             return 1;
     }
+}
+
+class Exp {
+
+    public boolean met1() {
+        {System.out.println(1);}
+        return true;
+    }
+
 }

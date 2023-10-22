@@ -128,9 +128,9 @@ void MainClass() #MainClass:
 void ClassDecl() #ClassDecl:
 { }
 {
-    <CLASS> Identifier() (<EXTENDS> Identifier() )? #Inheritance <LBRACE>
-         (((VarDecl())*) #VarDecls)
-         ((MethodDecl()) * #MethodDecls)
+    <CLASS> Identifier() ((<EXTENDS> Identifier() #Inheritance) )?  <LBRACE>
+         ((VarDecl())+ #VarDecls)?
+         ((MethodDecl())+ #MethodDecls)?
     <RBRACE>
 }
 
@@ -183,50 +183,70 @@ void Type() #Type:
 void Statement():
 {}
 {
-    <LBRACE> (Statement())* <RBRACE>
-|   <IF> <LPAR> Exp() <RPAR> Statement() <ELSE> Statement()
-|   <WHILE> <LPAR> Exp() <RPAR> Statement()
-|   <SOP> <LPAR> Exp() <RPAR>  <SEMICOLON>
-|   LOOKAHEAD(2) <ID> <ASSIGN>  Exp() <SEMICOLON>
-|   LOOKAHEAD(2) <ID> <LBRACKET> Exp() <RBRACKET> <ASSIGN>  Exp() <SEMICOLON>
+    (<LBRACE> (Statement())* <RBRACE>) #Block
+|   (<IF> <LPAR> Exp() <RPAR> Statement() <ELSE> Statement()) #If
+|   (<WHILE> <LPAR> Exp() <RPAR> Statement()) #While
+|   (<SOP> <LPAR> Exp() <RPAR>  <SEMICOLON>) #Print
+|   LOOKAHEAD(3) (ExpPostfix() <ASSIGN>  Exp() <SEMICOLON>) #Assignment
 |   VarDecl()
 }
 
 void Exp():
 {}
 {
-    ExpLogic()
+    ExpOr()
 }
 
-void ExpLogic():
+void ExpOr():
 {}
 {
-    ExpRel() ((<AND> | <OR> ) ExpRel())*
+    ExpAnd() ( <OR>  ExpAnd() #OrNode(2))*
+}
+
+void ExpAnd():
+{}
+{
+    ExpRel() ( <AND>  ExpRel() #AndNode(2))*
 }
 
 void ExpRel():
-{}
 {
-    ExpAdd() ((<GT> | <GTEQ> | <LESS> | <LESSEQ> | <EQUALS> | <NOTEQ> ) ExpAdd())*
+    Token t = null;
+}
+{
+    ExpAdd() (((t=<GT> | t=<GTEQ> | t=<LESS> | t=<LESSEQ> | t=<EQUALS> | t=<NOTEQ> ) {jjtThis.setName(t.image);} ExpAdd()) #RelNode(2))*
+
 }
 
 void ExpAdd():
-{}
 {
-    ExpMul() ((<PLUS> | <MINUS> ) ExpMul())*
+    Token t= null;
+}
+{
+    ExpMul() (((t=<PLUS> | t=<MINUS> ) {jjtThis.setName(t.image);} ExpMul() )#AddNode(2))*
 }
 
 void ExpMul():
-{}
 {
-    ExpUnary() ((<MUL> | <DIV> ) ExpUnary())*
+    Token t = null;
+}
+{
+    ExpUnary() (((t=<MUL> | t=<DIV> ) {jjtThis.setName(t.image);} ExpUnary() )#MulNode(2))*
+
 }
 
-void ExpUnary():
-{}
+void ExpUnary() #UnaryNode:
 {
-    (<MINUS> | <NOT>)?
+    Token t = null;
+}
+{
+    (t=<MINUS> | t=<NOT>)?
     ExpPostfix()
+    {
+        if(t != null) {
+            jjtThis.setName(t.image);
+        }
+    }
 }
 
 void ExpPostfix():
@@ -238,16 +258,18 @@ void ExpPostfix():
 }
 
 void ExpFactor():
-{}
 {
-    <INTEGER_LITERAL>
-|   <TRUE>
-|   <FALSE>
-|   <ID>
-|   <THIS>
+    Token t;
+}
+{
+    (t=<INTEGER_LITERAL> {jjtThis.setValue(t.image);} #Integer )
+|   <TRUE> #True
+|   <FALSE> #False
+|   Identifier()
+|   <THIS> #This
 |   <LPAR> Exp() <RPAR>
 |   LOOKAHEAD(2) <NEW> <INT> <LBRACKET> Exp() <RBRACKET>
-|   <NEW> <ID> <LPAR> <RPAR>
+|   <NEW> Identifier() <LPAR> <RPAR>
 }
 
 void ExpList():
