@@ -22,7 +22,8 @@ class ASTUnaryNode extends SimpleNode {
 
   @Override
   public String toString() {
-    return super.toString() + ": " + name;
+//    return super.toString() + ": " + name;
+    return super.toString() + ((name != null)?(": " + name):(""));
   }
 
 }

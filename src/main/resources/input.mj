@@ -12,14 +12,24 @@ class Test1 extends Test2 {
     boolean[] vect_bool;
 
     public int meth1(int a, boolean b) {
-
-        this.obj1[1] = a + b + c * 1;
-
+        this.obj1[2] = a + b + c * 6;
+        c = obj1[2];
         return 1;
     }
 
     public Test1[] meth2(Test2[] vec) {
-            return 1;
+        while( 3 > 2) {
+            if( !var) {
+                b = vec[2].getInt();
+            }
+            else {
+                b = 10;
+            }
+        }
+
+         int c;
+         c = vec.meth1(-2, !false);
+         return 1;
     }
 }
 

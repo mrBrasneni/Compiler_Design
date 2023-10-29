@@ -388,7 +388,34 @@ void MethodDecl()            :
                                            }
                                          }
 /*@egen*/      ) <RPAR> <LBRACE>
-        (LOOKAHEAD(2) VarDecl())* (Statement())* <RETURN> Exp() <SEMICOLON>
+        (LOOKAHEAD(3) VarDecl())* (Statement())*/*@bgen(jjtree) Retrun */
+                                                 {
+                                                   ASTRetrun jjtn002 = new ASTRetrun(JJTRETRUN);
+                                                   boolean jjtc002 = true;
+                                                   jjtree.openNodeScope(jjtn002);
+                                                 }
+                                                 try {
+/*@egen*/ (<RETURN> Exp())/*@bgen(jjtree)*/
+                                                 } catch (Throwable jjte002) {
+                                                   if (jjtc002) {
+                                                     jjtree.clearNodeScope(jjtn002);
+                                                     jjtc002 = false;
+                                                   } else {
+                                                     jjtree.popNode();
+                                                   }
+                                                   if (jjte002 instanceof RuntimeException) {
+                                                     throw (RuntimeException)jjte002;
+                                                   }
+                                                   if (jjte002 instanceof ParseException) {
+                                                     throw (ParseException)jjte002;
+                                                   }
+                                                   throw (Error)jjte002;
+                                                 } finally {
+                                                   if (jjtc002) {
+                                                     jjtree.closeNodeScope(jjtn002, true);
+                                                   }
+                                                 }
+/*@egen*/        <SEMICOLON>
     <RBRACE>/*@bgen(jjtree)*/
     } catch (Throwable jjte000) {
       if (jjtc000) {
@@ -518,12 +545,6 @@ void Type()      :
 /*@egen*/
 }
 
-//void TypeArray() #TypeArray:
-//{}
-//{
-//    <LBRACKET> <RBRACKET>
-//}
-
 void Statement():
 {}
 {/*@bgen(jjtree) Block */
@@ -646,7 +667,7 @@ void Statement():
                    jjtree.openNodeScope(jjtn005);
                  }
                  try {
-/*@egen*/ (ExpPostfix() <ASSIGN>  Exp() <SEMICOLON>)/*@bgen(jjtree)*/
+/*@egen*/ (ExpUnary() <ASSIGN>  Exp() <SEMICOLON>)/*@bgen(jjtree)*/
                  } catch (Throwable jjte005) {
                    if (jjtc005) {
                      jjtree.clearNodeScope(jjtn005);
@@ -897,8 +918,62 @@ void ExpUnary()           :
 void ExpPostfix():
 {}
 {
-    ExpFactor() (<LBRACKET> Exp() <RBRACKET>
-                | LOOKAHEAD(2) <DOT> <ID> (<LPAR> ExpList() <RPAR>)?
+    ExpFactor() (/*@bgen(jjtree) VecAccess */
+                 {
+                   ASTVecAccess jjtn001 = new ASTVecAccess(JJTVECACCESS);
+                   boolean jjtc001 = true;
+                   jjtree.openNodeScope(jjtn001);
+                 }
+                 try {
+/*@egen*/(<LBRACKET> Exp() <RBRACKET>)/*@bgen(jjtree)*/
+                 } catch (Throwable jjte001) {
+                   if (jjtc001) {
+                     jjtree.clearNodeScope(jjtn001);
+                     jjtc001 = false;
+                   } else {
+                     jjtree.popNode();
+                   }
+                   if (jjte001 instanceof RuntimeException) {
+                     throw (RuntimeException)jjte001;
+                   }
+                   if (jjte001 instanceof ParseException) {
+                     throw (ParseException)jjte001;
+                   }
+                   throw (Error)jjte001;
+                 } finally {
+                   if (jjtc001) {
+                     jjtree.closeNodeScope(jjtn001, true);
+                   }
+                 }
+/*@egen*/           
+                | LOOKAHEAD(2) (<DOT> Identifier() (/*@bgen(jjtree) FunctionCall */
+                                                    {
+                                                      ASTFunctionCall jjtn002 = new ASTFunctionCall(JJTFUNCTIONCALL);
+                                                      boolean jjtc002 = true;
+                                                      jjtree.openNodeScope(jjtn002);
+                                                    }
+                                                    try {
+/*@egen*/(<LPAR> ExpList() <RPAR>)/*@bgen(jjtree)*/
+                                                    } catch (Throwable jjte002) {
+                                                      if (jjtc002) {
+                                                        jjtree.clearNodeScope(jjtn002);
+                                                        jjtc002 = false;
+                                                      } else {
+                                                        jjtree.popNode();
+                                                      }
+                                                      if (jjte002 instanceof RuntimeException) {
+                                                        throw (RuntimeException)jjte002;
+                                                      }
+                                                      if (jjte002 instanceof ParseException) {
+                                                        throw (ParseException)jjte002;
+                                                      }
+                                                      throw (Error)jjte002;
+                                                    } finally {
+                                                      if (jjtc002) {
+                                                        jjtree.closeNodeScope(jjtn002, true);
+                                                      }
+                                                    }
+/*@egen*/             )?)
                 | <DOT> <LENGTH> )*
 }
 

@@ -144,7 +144,7 @@ void MethodDecl() #MethodDecl:
 {}
 {
     <PUBLIC> Type() Identifier() <LPAR> (FormalList() #Args) <RPAR> <LBRACE>
-        (LOOKAHEAD(2) VarDecl())* (Statement())* <RETURN> Exp() <SEMICOLON>
+        (LOOKAHEAD(3) VarDecl())* (Statement())* (<RETURN> Exp())#Retrun <SEMICOLON>
     <RBRACE>
 }
 
@@ -174,12 +174,6 @@ void Type() #Type:
     (<LBRACKET> <RBRACKET>{jjtThis.setVector(true);})?
 }
 
-//void TypeArray() #TypeArray:
-//{}
-//{
-//    <LBRACKET> <RBRACKET>
-//}
-
 void Statement():
 {}
 {
@@ -187,7 +181,7 @@ void Statement():
 |   (<IF> <LPAR> Exp() <RPAR> Statement() <ELSE> Statement()) #If
 |   (<WHILE> <LPAR> Exp() <RPAR> Statement()) #While
 |   (<SOP> <LPAR> Exp() <RPAR>  <SEMICOLON>) #Print
-|   LOOKAHEAD(3) (ExpPostfix() <ASSIGN>  Exp() <SEMICOLON>) #Assignment
+|   LOOKAHEAD(3) (ExpUnary() <ASSIGN>  Exp() <SEMICOLON>) #Assignment
 |   VarDecl()
 }
 
@@ -252,8 +246,8 @@ void ExpUnary() #UnaryNode:
 void ExpPostfix():
 {}
 {
-    ExpFactor() (<LBRACKET> Exp() <RBRACKET>
-                | LOOKAHEAD(2) <DOT> <ID> (<LPAR> ExpList() <RPAR>)?
+    ExpFactor() ((<LBRACKET> Exp() <RBRACKET>) #VecAccess
+                | LOOKAHEAD(2) (<DOT> Identifier() ((<LPAR> ExpList() <RPAR>)#FunctionCall)?)
                 | <DOT> <LENGTH> )*
 }
 

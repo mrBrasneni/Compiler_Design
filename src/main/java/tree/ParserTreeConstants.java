@@ -13,24 +13,27 @@ public interface ParserTreeConstants
   public int JJTVARDECL = 7;
   public int JJTMETHODDECL = 8;
   public int JJTARGS = 9;
-  public int JJTVOID = 10;
-  public int JJTARG = 11;
-  public int JJTTYPE = 12;
-  public int JJTBLOCK = 13;
-  public int JJTIF = 14;
-  public int JJTWHILE = 15;
-  public int JJTPRINT = 16;
-  public int JJTASSIGNMENT = 17;
-  public int JJTORNODE = 18;
-  public int JJTANDNODE = 19;
-  public int JJTRELNODE = 20;
-  public int JJTADDNODE = 21;
-  public int JJTMULNODE = 22;
-  public int JJTUNARYNODE = 23;
-  public int JJTINTEGER = 24;
-  public int JJTTRUE = 25;
-  public int JJTFALSE = 26;
-  public int JJTTHIS = 27;
+  public int JJTRETRUN = 10;
+  public int JJTVOID = 11;
+  public int JJTARG = 12;
+  public int JJTTYPE = 13;
+  public int JJTBLOCK = 14;
+  public int JJTIF = 15;
+  public int JJTWHILE = 16;
+  public int JJTPRINT = 17;
+  public int JJTASSIGNMENT = 18;
+  public int JJTORNODE = 19;
+  public int JJTANDNODE = 20;
+  public int JJTRELNODE = 21;
+  public int JJTADDNODE = 22;
+  public int JJTMULNODE = 23;
+  public int JJTUNARYNODE = 24;
+  public int JJTVECACCESS = 25;
+  public int JJTFUNCTIONCALL = 26;
+  public int JJTINTEGER = 27;
+  public int JJTTRUE = 28;
+  public int JJTFALSE = 29;
+  public int JJTTHIS = 30;
 
 
   public String[] jjtNodeName = {
@@ -44,6 +47,7 @@ public interface ParserTreeConstants
     "VarDecl",
     "MethodDecl",
     "Args",
+    "Retrun",
     "void",
     "Arg",
     "Type",
@@ -58,10 +62,12 @@ public interface ParserTreeConstants
     "AddNode",
     "MulNode",
     "UnaryNode",
+    "VecAccess",
+    "FunctionCall",
     "Integer",
     "True",
     "False",
     "This",
   };
 }
-/* JavaCC - OriginalChecksum=4540438c5b2dcc5066d5dc782d19a28a (do not edit this line) */
+/* JavaCC - OriginalChecksum=24222a0b35c6db8938ab54de956cdee4 (do not edit this line) */
