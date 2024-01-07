@@ -4,6 +4,7 @@ options {
     NODE_DEFAULT_VOID = true;
     OUTPUT_DIRECTORY = "../parser";
     JJTREE_OUTPUT_DIRECTORY = "../java/tree";
+    VISITOR = true;
 }
 
 PARSER_BEGIN(Parser)

@@ -3,6 +3,7 @@ package main;
 import parser.ParseException;
 import parser.Parser;
 import tree.Node;
+import tree.VisualizerVisitor;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -19,7 +20,10 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("AST Viewer");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            JTree astTree = createASTTree(n);
+            VisualizerVisitor visitor = new VisualizerVisitor();
+            n.jjtAccept(visitor, null);
+//            JTree astTree = createASTTree(n);
+            JTree astTree = visitor.getJTree();
             frame.add(new JScrollPane(astTree));
 
             expandAllNodes(astTree, 0, astTree.getRowCount());
